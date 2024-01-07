@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function getAllCategory()
     {
-        $category = Category::get();
+        $category = Category::with('Products')->get();
         if (!$category) {
             return response()->json([
                 'status' => "fail",
@@ -28,7 +28,7 @@ class CategoryController extends Controller
     }
     public function getSingleCategory($categoryId)
     {
-        $category = Category::find($categoryId);
+        $category = Category::with('Products')->find($categoryId);
         if (!$category) {
             return response()->json([
                 'status' => "fail",
