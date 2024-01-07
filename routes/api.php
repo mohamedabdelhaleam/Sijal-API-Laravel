@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,13 @@ Route::group(['prefix' => 'category'], function () {
     Route::delete('delete/{categoryId}', [CategoryController::class, 'deleteCategory']);
 });
 ################## End Category Routes ######################
+
+################## Start Product Routes ####################
+Route::group(['prefix' => 'product'], function () {
+    Route::get('', [ProductController::class, 'getAllProduct']);
+    Route::get('{productId}', [ProductController::class, 'getSingleProduct']);
+    Route::post('create', [ProductController::class, 'createProduct']);
+    Route::patch('update/{productId}', [ProductController::class, 'updateProduct']);
+    Route::delete('delete/{productId}', [ProductController::class, 'deleteProduct']);
+});
+################## End Product Routes ######################
