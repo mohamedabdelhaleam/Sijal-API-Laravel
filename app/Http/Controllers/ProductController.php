@@ -28,7 +28,7 @@ class ProductController extends Controller
     }
     public function getSingleProduct($productId)
     {
-        $product = Product::find($productId);
+        $product = Product::with('Reviews')->find($productId);
         if (!$product) {
             return response()->json([
                 'status' => "fail",
