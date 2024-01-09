@@ -12,4 +12,10 @@ class OrderItem extends Model
     protected $fillable = ['quantity', 'sub_total', 'order_id', 'product_id'];
     protected $hidden = [];
     public $timestamps = false;
+
+
+    public function OrderItems()
+    {
+        return $this->belongsTo(Order::class, "order_id", "id");
+    }
 }
