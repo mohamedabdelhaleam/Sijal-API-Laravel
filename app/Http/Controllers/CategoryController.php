@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -14,10 +13,9 @@ class CategoryController extends Controller
         if (!$category) {
             return response()->json([
                 'status' => "fail",
-                'data' => [
-                    'category' => 'No Content'
-                ]
-            ], 204);
+                'message' => "Not Found",
+                'data' => null
+            ], 404);
         }
         return response()->json([
             'status' => "success",
@@ -52,7 +50,7 @@ class CategoryController extends Controller
         if (!$category) {
             return response()->json([
                 'status' => "fail",
-                'message' => "Category Created Faild",
+                'message' => "Category Creation Failed.",
                 'data' => null
             ], 404);
         }
@@ -86,17 +84,20 @@ class CategoryController extends Controller
     public function deleteCategory($categoryId)
     {
         $category = Category::find($categoryId);
+
         if (!$category) {
             return response()->json([
-                'status' => "fail",
-                'message' => "Not Found",
+                'status' => 'fail',
+                'message' => 'Not Found',
                 'data' => null
             ], 404);
         }
+
         $category->delete();
+
         return response()->json([
-            'status' => "success",
-            'message' => "Category Deleted Successfully",
+            'status' => 'success',
+            'message' => 'Category Deleted Successfully',
             'data' => null
         ], 200);
     }
