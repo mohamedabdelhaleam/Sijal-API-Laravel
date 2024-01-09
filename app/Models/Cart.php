@@ -12,4 +12,11 @@ class Cart extends Model
     protected $fillable = ['user_id'];
     protected $hidden = [];
     public $timestamps = false;
+
+
+
+    public function CartItems()
+    {
+        return $this->hasMany(CartItem::class, 'cart_id', 'id');
+    }
 }
