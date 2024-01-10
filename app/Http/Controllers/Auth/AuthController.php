@@ -69,7 +69,10 @@ class AuthController extends Controller
 
     public function userProfile()
     {
-        return response()->json(auth()->user());
+        return response()->json([
+            'status' => "success",
+            'data' => auth()->user()
+        ]);
     }
 
     /**
