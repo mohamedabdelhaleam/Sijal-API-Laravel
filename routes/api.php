@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +24,30 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+################## Start Auth Routes ####################
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+});
+################## End Auth Routes ######################
+
+################## Start User Routes ####################
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'user'
+], function () {
+    Route::get('', [UserController::class, 'getAllUsers']);
+    Route::get('cart', [UserController::class, 'getUserCart']);
+    Route::get('order', [OrderController::class, 'getUserOrder']);
+});
+################## End User Routes ######################
 
 ################## Start Category Routes ####################
 Route::group(['prefix' => 'category'], function () {
@@ -40,3 +68,9 @@ Route::group(['prefix' => 'product'], function () {
     Route::delete('delete/{productId}', [ProductController::class, 'deleteProduct']);
 });
 ################## End Product Routes ######################
+
+################## Start Cart Routes ####################
+Route::group(['prefix' => 'cart'], function () {
+    Route::get('{cartId}', [CartController::class, 'getOneCart']);
+});
+################## End Cart Routes ######################
