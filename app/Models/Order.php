@@ -10,7 +10,7 @@ class Order extends Model
     use HasFactory;
     protected $table = "orders";
     protected $fillable = ['total_amount', 'status', 'order_date', 'user_id'];
-    protected $hidden = [];
+    protected $hidden = ['pivot'];
     public $timestamps = true;
 
 
