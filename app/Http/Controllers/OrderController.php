@@ -9,7 +9,7 @@ class OrderController extends Controller
 {
     public function getUserOrder()
     {
-        $order = User::with('Orders')->find(auth()->user());
+        $order = User::with('Orders.OrderItems')->find(auth()->user());
         if (!$order) {
             return response()->json([
                 'status' => "fail",
