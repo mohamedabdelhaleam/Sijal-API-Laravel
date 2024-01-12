@@ -46,6 +46,7 @@ Route::group([
     Route::get('', [UserController::class, 'getAllUsers']);
     Route::get('cart', [UserController::class, 'getUserCart']);
     Route::get('order', [OrderController::class, 'getUserOrder']);
+    Route::get('createOrder', [OrderController::class, 'createOrder']);
 });
 ################## End User Routes ######################
 
