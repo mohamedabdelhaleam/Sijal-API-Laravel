@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,9 @@ class UserController extends Controller
     }
     public function getUserCart()
     {
-        $user = User::with('Carts.CartItems.Products')->find(auth()->user());
+        $user = auth()->user();
+        //$cart = User::with('Carts.CartItems.Products')->find();
+        $cart = Cart::where("user_id", $user->id)->with('CartItems.Products')->get();
         if (!$user) {
             return response()->json([
                 'status' => "fail",
@@ -37,7 +40,7 @@ class UserController extends Controller
         return response()->json([
             'status' => "success",
             'data' => [
-                'user' => $user
+                'cart' => $cart
             ]
         ], 200);
     }
