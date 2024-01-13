@@ -29,7 +29,7 @@ class UserController extends Controller
     {
         $user = auth()->user();
         //$cart = User::with('Carts.CartItems.Products')->find();
-        $cart = Cart::where("user_id", $user->id)->with('CartItems.Products')->get();
+        $cart = Cart::where("user_id", $user->id)->first();
         if (!$user) {
             return response()->json([
                 'status' => "fail",
