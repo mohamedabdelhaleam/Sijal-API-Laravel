@@ -8,9 +8,16 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function getOneCart($cartId)
+    public function __construct()
     {
-        $cart = Cart::with('cartItems.Products')->find($cartId);
+        $this->middleware('auth:api');
+    }
+    public function getCart()
+    {
+
+        $user = auth()->user();
+
+        $cart = Cart::where('user_id', $user->id)->with('CartItems.Products')->first();
         if (!$cart) {
             return response()->json([
                 'status' => "fail",
@@ -20,7 +27,6 @@ class CartController extends Controller
         }
         return response()->json([
             'status' => "success",
-            'message' => null,
             'data' => [
                 'cart' => $cart
             ]
