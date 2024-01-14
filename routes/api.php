@@ -44,9 +44,6 @@ Route::group([
     'prefix' => 'user'
 ], function () {
     Route::get('', [UserController::class, 'getAllUsers']);
-    Route::get('cart', [UserController::class, 'getUserCart']);
-    Route::get('order', [OrderController::class, 'getUserOrder']);
-    Route::get('createOrder', [OrderController::class, 'createOrder']);
 });
 ################## End User Routes ######################
 
@@ -71,7 +68,22 @@ Route::group(['prefix' => 'product'], function () {
 ################## End Product Routes ######################
 
 ################## Start Cart Routes ####################
-Route::group(['prefix' => 'cart'], function () {
-    Route::get('{cartId}', [CartController::class, 'getOneCart']);
+Route::group([
+    'prefix' => 'cart'
+], function () {
+    Route::get('', [CartController::class, 'getCart']);
+    Route::post('addProduct', [CartController::class, 'addProductToCart']);
+    Route::delete('removeProduct/{productId}', [CartController::class, 'removeProductInCart']);
+    Route::delete('removeAllProduct', [CartController::class, 'removeAllProductInCart']);
+    Route::patch('updateProductQuantity/{productId}', [CartController::class, 'updateProductQuantityInCart']);
+});
+################## End Cart Routes ######################
+
+################## Start Cart Routes ####################
+Route::group([
+    'prefix' => 'orders'
+], function () {
+    Route::get('', [OrderController::class, 'getOrder']);
+    Route::get('products', [OrderController::class, 'getOrdersWithProducts']);
 });
 ################## End Cart Routes ######################
