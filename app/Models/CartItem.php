@@ -9,8 +9,8 @@ class CartItem extends Model
 {
     use HasFactory;
     protected $table = "cart_items";
-    protected $fillable = ['quantity', 'cart_id', 'product_id'];
-    protected $hidden = ['pivot', 'product_id'];
+    protected $fillable = ['quantity', 'product_id', 'cart_id'];
+    protected $hidden = ['pivot', 'product_id', 'cart_id'];
     public $timestamps = false;
 
 
