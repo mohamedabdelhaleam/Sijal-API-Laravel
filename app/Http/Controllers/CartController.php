@@ -15,7 +15,7 @@ class CartController extends Controller
         $this->middleware('auth:api');
     }
 
-    
+
     public function getCart()
     {
 
@@ -73,8 +73,20 @@ class CartController extends Controller
         $cartItems = CartItem::where('cart_id', $cart->id)->find($productId);
         $productItem = CartItem::where('cart_id', $cart->id)->find($productId);
         $productCart = CartProduct::where('cart_items_id', $cartItems->id)->find($productId);
-        $productItem->delete();
-        $productCart->delete();
+        if ($productItem && $productCart) {
+            $productItem->delete();
+            $productCart->delete();
+            return response()->json([
+                'status' => "success",
+                'message' => "Updated Successfully"
+            ], 404);
+        } else {
+            return response()->json([
+                'status' => "fail",
+                'message' => "Can not Delete Product",
+                'data' => null
+            ], 404);
+        }
     }
 
 
@@ -82,7 +94,7 @@ class CartController extends Controller
     {
         $user = auth()->user();
         $cart = Cart::where('user_id', $user->id)->first();
-        $cart = CartItem::where('cart_id', $cart->id)->first();
+        $cartItems = CartItem::where('cart_id', $cart->id)->first();
     }
 
 
