@@ -6,7 +6,6 @@ use App\Http\Requests\AddProductRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\CartProduct;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -15,6 +14,8 @@ class CartController extends Controller
     {
         $this->middleware('auth:api');
     }
+
+    
     public function getCart()
     {
 
@@ -35,48 +36,36 @@ class CartController extends Controller
             ]
         ], 200);
     }
+
+
     public function addProductToCart(AddProductRequest $request)
     {
         $user = auth()->user();
         $cart = Cart::where('user_id', $user->id)->first();
-        if ($cart) {
-            $cartItems = CartItem::create([
-                'quantity' => $request->quantity,
-                'cart_id' => $cart->id,
-                'product_id' => $request->product_id
-            ]);
-            if ($cartItems) {
-                $cartProducts = CartProduct::create([
-                    'cart_items_id' => $cartItems->id,
-                    'product_id' => $request->product_id
-                ]);
-                if ($cartProducts) {
-                    return response()->json([
-                        'status' => "success",
-                        'message' => "Product Added Successfully",
-                    ], 201);
-                } else {
-                    return response()->json([
-                        'status' => "fail",
-                        'message' => "Not Found",
-                        'data' => null
-                    ], 404);
-                }
-            } else {
-                return response()->json([
-                    'status' => "fail",
-                    'message' => "Not Found",
-                    'data' => null
-                ], 404);
-            }
+        $cartItems = CartItem::create([
+            'quantity' => $request->quantity,
+            'cart_id' => $cart->id,
+            'product_id' => $request->product_id
+        ]);
+        $cartProducts = CartProduct::create([
+            'cart_items_id' => $cartItems->id,
+            'product_id' => $request->product_id
+        ]);
+        if ($cartItems && $cartProducts) {
+            return response()->json([
+                'status' => "success",
+                'message' => "Product Added Successfully",
+            ], 201);
         } else {
             return response()->json([
                 'status' => "fail",
-                'message' => "Not Found",
+                'message' => "Can not Add Product To Cart",
                 'data' => null
             ], 404);
         }
     }
+
+
     public function removeProductInCart($productId)
     {
         $user = auth()->user();
@@ -87,18 +76,22 @@ class CartController extends Controller
         $productItem->delete();
         $productCart->delete();
     }
+
+
     public function removeAllProductInCart()
     {
         $user = auth()->user();
         $cart = Cart::where('user_id', $user->id)->first();
         $cart = CartItem::where('cart_id', $cart->id)->first();
     }
+
+
     public function updateProductQuantityInCart(Request $request, $productId)
     {
         $user = auth()->user();
         $cart = Cart::where('user_id', $user->id)->first();
-        if ($cart) {
-            $product = CartItem::where('cart_id', $cart->id)->find($productId);
+        $product = CartItem::where('cart_id', $cart->id)->find($productId);
+        if ($product) {
             $product->update($request->all());
             return response()->json([
                 'status' => "success",
@@ -107,7 +100,7 @@ class CartController extends Controller
         } else {
             return response()->json([
                 'status' => "fail",
-                'message' => "Not Found",
+                'message' => "Can not Update Quantity",
                 'data' => null
             ], 404);
         }
