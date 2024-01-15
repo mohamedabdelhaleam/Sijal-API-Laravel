@@ -79,7 +79,7 @@ class CartController extends Controller
             return response()->json([
                 'status' => "success",
                 'message' => "Updated Successfully"
-            ], 404);
+            ], 200);
         } else {
             return response()->json([
                 'status' => "fail",
@@ -95,6 +95,18 @@ class CartController extends Controller
         $user = auth()->user();
         $cart = Cart::where('user_id', $user->id)->first();
         $cartItems = CartItem::where('cart_id', $cart->id)->first();
+        $cartProducts = CartProduct::where('cart_items_id', $cartItems->id)->first();
+        foreach ($cartItems as $cartItem) {
+            $cartItem->delete();
+        }
+        foreach ($cartProducts as $cartProduct) {
+            $cartProduct->delete();
+        }
+        return response()->json([
+            'status' => "success",
+            'message' => "Deleted Successfully",
+            'data' => null
+        ], 200);
     }
 
 
@@ -108,7 +120,7 @@ class CartController extends Controller
             return response()->json([
                 'status' => "success",
                 'message' => "Updated Successfully"
-            ], 404);
+            ], 200);
         } else {
             return response()->json([
                 'status' => "fail",
