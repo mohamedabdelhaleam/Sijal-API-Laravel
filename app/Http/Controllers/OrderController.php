@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderProduct;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request as HttpRequest;
 
 class OrderController extends Controller
 {
@@ -72,5 +75,30 @@ class OrderController extends Controller
                 ]);
             }
         }
+    }
+    public function changeOrderStatus(HttpRequest $request, $orderId, $productId)
+    {
+        $user = auth()->user();
+        $order = Order::where("user_id", $user->id)->find($orderId);
+        $orderItems = OrderItem::where("order_id", $order->id)->find($productId);
+        if ($orderItems) {
+            $orderItems->update($request->all());
+            return response()->json([
+                'status' => "success",
+                'message' => "Updated Successfully"
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => "fail",
+                'message' => "Can not Update Status",
+                'data' => null
+            ], 404);
+        }
+    }
+    public function deleteOrder($orderId)
+    {
+        $user = auth()->user();
+        $order = Order::where("user_id", $user->id)->find($orderId);
+        $orderItems = OrderItem::where("order_id", $order->id)->find();
     }
 }
