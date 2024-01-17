@@ -85,5 +85,8 @@ Route::group([
 ], function () {
     Route::get('', [OrderController::class, 'getOrder']);
     Route::get('products', [OrderController::class, 'getOrdersWithProducts']);
+    Route::get('createOrder', [OrderController::class, 'createOrder']);
+    Route::get('changeStatus/{orderId}', [OrderController::class, 'changeStatus']);
+    Route::get('deleteOrder', [OrderController::class, 'deleteOrder']);
 });
 ################## End Cart Routes ######################
