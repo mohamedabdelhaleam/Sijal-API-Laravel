@@ -20,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 
 ################## Start Auth Routes ####################
 Route::group([
@@ -44,6 +40,8 @@ Route::group([
     'prefix' => 'user'
 ], function () {
     Route::get('', [UserController::class, 'getAllUsers']);
+    Route::patch('update', [UserController::class, 'update']);
+    Route::delete('delete', [UserController::class, 'delete']);
 });
 ################## End User Routes ######################
 
